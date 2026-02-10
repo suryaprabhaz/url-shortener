@@ -1,0 +1,14 @@
+{
+    "name": "linkly-root",
+    "version": "1.0.0",
+    "description": "Production URL Shortener Monorepo",
+    "scripts": {
+        "install:all": "cd backend && npm install && cd ../frontend && npm install",
+        "dev:backend": "cd backend && npm run start:dev",
+        "dev:frontend": "cd frontend && npm run dev",
+        "build:all": "cd backend && npm run build && cd ../frontend && npm run build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

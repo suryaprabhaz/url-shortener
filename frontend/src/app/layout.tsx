@@ -1,0 +1,27 @@
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+    title: 'Linkly - Free URL Shortener',
+    description: 'Simple, fast, and free URL shortener. Created by @suryaprabhaz.',
+    authors: [{ name: 'suryaprabhaz', url: 'https://github.com/suryaprabhaz' }],
+}
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en" className="dark" suppressHydrationWarning>
+            <body className={`${inter.className} bg-slate-950 text-slate-50 min-h-screen antialiased`}>
+                <div className="relative isolate px-6 pt-14 lg:px-8">
+                    {children}
+                </div>
+            </body>
+        </html>
+    )
+}

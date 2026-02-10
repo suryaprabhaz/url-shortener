@@ -2,8 +2,6 @@
 
 This is a simple, static URL shortener built with Next.js.
 
-## 🚀 **[Live Demo / Website](https://suryaprabhaz.github.io/url-shortener/)** *(Replace with your actual link after deploying)*
-
 ## Project Structure
 
 - `frontend/`: The main application code (Next.js 14, Tailwind CSS).

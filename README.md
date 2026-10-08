@@ -1,17 +1,47 @@
-# Linkly - URL Shortener
+# Linkly — URL Shortener
 
-This is a simple, static URL shortener built with Next.js.
+A polished Next.js URL-shortening frontend with a provider-backed shortening flow.
 
-## Project Structure
+## What it demonstrates
 
-- `frontend/`: The main application code (Next.js 14, Tailwind CSS).
+- Next.js App Router + TypeScript
+- Responsive Tailwind UI
+- Client-side URL validation
+- Abortable network requests with an 8-second timeout
+- Safe handling of provider responses
+- Clipboard support with graceful failure handling
+- Accessible interactive controls
+- CI build verification
 
-## How to Run
+## Architecture
 
-1. `cd frontend`
-2. `npm install`
-3. `npm run dev`
+The current project is intentionally a **frontend/provider integration demo**. It does not contain the backend implied by the old monorepo scripts.
 
-## Credits
+For a true production URL-shortening service, the next architecture should be:
 
-Created by **[@suryaprabhaz](https://github.com/suryaprabhaz)**.
+`Browser → authenticated API → database → redirect service`
+
+with unique aliases, rate limiting, abuse controls, expiration, analytics and persistent storage.
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+Or:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Security
+
+See [SECURITY.md](SECURITY.md). Do not treat the current client-side provider flow as a complete production redirect service.
+
+## Author
+
+[@suryaprabhaz](https://github.com/suryaprabhaz)

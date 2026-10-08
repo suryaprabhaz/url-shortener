@@ -35,11 +35,15 @@ export default function Home() {
         try {
             const controller = new AbortController();
             const timeout = window.setTimeout(() => controller.abort(), 8000);
-            const response = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(normalized), {
-                signal: controller.signal,
-                headers: { Accept: 'text/plain' }
-            });
-            window.clearTimeout(timeout);
+            let response;
+            try {
+                response = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(normalized), {
+                    signal: controller.signal,
+                    headers: { Accept: 'text/plain' }
+                });
+            } finally {
+                window.clearTimeout(timeout);
+            }
 
             if (!response.ok) throw new Error('Failed to shorten URL');
             const result = (await response.text()).trim();

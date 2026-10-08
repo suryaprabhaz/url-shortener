@@ -15,30 +15,53 @@ export default function Home() {
 
     const shortenUrl = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!url) return;
+        const normalized = url.trim();
+        if (!normalized) return;
+
+        try {
+            const parsed = new URL(normalized);
+            if (!['http:', 'https:'].includes(parsed.protocol)) {
+                throw new Error('Only HTTP and HTTPS URLs are supported.');
+            }
+        } catch {
+            setError('Enter a valid HTTP or HTTPS URL.');
+            return;
+        }
 
         setIsLoading(true);
         setError('');
         setShortUrl('');
 
         try {
-            // Using TinyURL API (No API key required for basic usage)
-            const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
-            if (!response.ok) throw new Error('Failed to shorten URL');
+            const controller = new AbortController();
+            const timeout = window.setTimeout(() => controller.abort(), 8000);
+            const response = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(normalized), {
+                signal: controller.signal,
+                headers: { Accept: 'text/plain' }
+            });
+            window.clearTimeout(timeout);
 
-            const result = await response.text();
+            if (!response.ok) throw new Error('Failed to shorten URL');
+            const result = (await response.text()).trim();
+            if (!/^https?:\/\//i.test(result)) throw new Error('Invalid short URL returned by provider');
             setShortUrl(result);
         } catch (err) {
-            setError('Something went wrong. Please try again.');
+            setError(err instanceof DOMException && err.name === 'AbortError'
+                ? 'The shortening service timed out. Please try again.'
+                : 'Something went wrong. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
 
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(shortUrl);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(shortUrl);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            setError('Clipboard access was blocked. Copy the link manually.');
+        }
     };
 
     return (
